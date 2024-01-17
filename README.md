@@ -9,16 +9,19 @@ Each week, we explore a different algorithm or data structure, breaking down its
 ## Weekly Topics
 
 ### Week 1: The Spinning Donut
+
 - **Algorithm**: ASCII Art and 3D Rendering in the Console
 - **Language**: Java
 - [View Code](https://github.com/tpepels/dacs_algo_of_the_week/blob/main/Donut.java)
 
-### Week 2: TBD
-- **Algorithm**:
-- **Language**:
-- [View Code](link-to-week-2-code)
+### Week 2: The Game of Life
 
-### Week 3: TBD
+- **Algorithm**: An implementation of Conway's Game of Life
+- **Language**: Java
+- [View Code](https://github.com/tpepels/dacs_algo_of_the_week/blob/main/GameOfLife.java)
+
+### Week 3: A Simple Decision Tree
+
 - **Algorithm**:
 - **Language**:
 - [View Code](link-to-week-3-code)
@@ -40,4 +43,3 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Contact
 
 For any inquiries or suggestions, please contact [Tom Pepels] at [tom.pepels@maastrichtuniversity.nl].
-
