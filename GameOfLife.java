@@ -1,23 +1,50 @@
-// A simple Java program to implement Game of Life
 public class GameOfLife {
-    public static void main(String[] args) {
-        int M = 10, N = 10;
+    public static void main(String[] args) throws InterruptedException {
+        int M = 20, N = 20;
+        int[][] grid = new int[M][N];
 
-        // Initializing the grid.
-        int[][] grid = { { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 1, 1, 0, 0, 0, 0, 0 },
-                { 0, 0, 1, 1, 0, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 1, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 1, 0, 0, 0, 0, 0 },
-                { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }
-        };
+        // TODO You can try out different patterns by uncommenting the lines below
+        // initializeGlider(grid, M, N);
+        initializeExploder(grid, M, N);
 
-        // Displaying the grid
-        System.out.println("Original Generation");
+        while (true) {
+            printGeneration(grid, M, N);
+            grid = nextGeneration(grid, M, N);
+            Thread.sleep(600); // Delay of 600 milliseconds between generations
+        }
+    }
+
+    // Function to generate next generation
+    static int[][] nextGeneration(int[][] grid, int M, int N) {
+        int[][] future = new int[M][N];
+
+        for (int l = 0; l < M; l++) {
+            for (int m = 0; m < N; m++) {
+                int aliveNeighbours = countAliveNeighbours(grid, l, m, M, N);
+                future[l][m] = (grid[l][m] == 1 && (aliveNeighbours == 2 || aliveNeighbours == 3)) ||
+                        (grid[l][m] == 0 && aliveNeighbours == 3) ? 1 : 0;
+            }
+        }
+        return future;
+    }
+
+    // Function to count alive neighbours
+    static int countAliveNeighbours(int[][] grid, int l, int m, int M, int N) {
+        int alive = 0;
+        for (int i = -1; i <= 1; i++)
+            for (int j = -1; j <= 1; j++)
+                if (l + i >= 0 && l + i < M && m + j >= 0 && m + j < N)
+                    alive += grid[l + i][m + j];
+        alive -= grid[l][m];
+        return alive;
+    }
+
+    // Function to print the current generation
+    static void printGeneration(int grid[][], int M, int N) {
+        // Clear the console screen
+        clearConsole();
+
+        System.out.println("Current Generation");
         for (int i = 0; i < M; i++) {
             for (int j = 0; j < N; j++) {
                 if (grid[i][j] == 0)
@@ -28,56 +55,52 @@ public class GameOfLife {
             System.out.println();
         }
         System.out.println();
-        nextGeneration(grid, M, N);
     }
 
-    // Function to print next generation
-    static void nextGeneration(int grid[][], int M, int N) {
-        int[][] future = new int[M][N];
+    // Function to clear the console
+    static void clearConsole() {
+        try {
+            final String os = System.getProperty("os.name");
 
-        // Loop through every cell
-        for (int l = 0; l < M; l++) {
-            for (int m = 0; m < N; m++) {
-                // finding no Of Neighbours that are alive
-                int aliveNeighbours = 0;
-                for (int i = -1; i <= 1; i++)
-                    for (int j = -1; j <= 1; j++)
-                        if ((l + i >= 0 && l + i < M) && (m + j >= 0 && m + j < N))
-                            aliveNeighbours += grid[l + i][m + j];
-
-                // The cell needs to be subtracted from
-                // its neighbours as it was counted before
-                aliveNeighbours -= grid[l][m];
-
-                // Implementing the Rules of Life
-
-                // Cell is lonely and dies
-                if ((grid[l][m] == 1) && (aliveNeighbours < 2))
-                    future[l][m] = 0;
-
-                // Cell dies due to over population
-                else if ((grid[l][m] == 1) && (aliveNeighbours > 3))
-                    future[l][m] = 0;
-
-                // A new cell is born
-                else if ((grid[l][m] == 0) && (aliveNeighbours == 3))
-                    future[l][m] = 1;
-
-                // Remains the same
-                else
-                    future[l][m] = grid[l][m];
+            if (os.contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                // Clears the console (UNIX / Linux / MacOS)
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
             }
-        }
-
-        System.out.println("Next Generation");
-        for (int i = 0; i < M; i++) {
-            for (int j = 0; j < N; j++) {
-                if (future[i][j] == 0)
-                    System.out.print(".");
-                else
-                    System.out.print("*");
-            }
-            System.out.println();
+        } catch (final Exception e) {
+            e.printStackTrace();
         }
     }
+
+    // Function to initialize the grid with a Glider pattern
+    static void initializeGlider(int grid[][], int M, int N) {
+        // Ensure the grid is large enough for a Glider
+        if (M >= 3 && N >= 3) {
+            grid[M / 2][N / 2 + 1] = 1;
+            grid[M / 2 + 1][N / 2 + 2] = 1;
+            grid[M / 2 + 2][N / 2] = 1;
+            grid[M / 2 + 2][N / 2 + 1] = 1;
+            grid[M / 2 + 2][N / 2 + 2] = 1;
+        }
+    }
+
+    // Function to initialize the grid with a Small Exploder pattern
+    static void initializeExploder(int grid[][], int M, int N) {
+        // Ensure the grid is large enough for a Small Exploder
+        if (M >= 5 && N >= 5) {
+            int midRow = M / 2;
+            int midCol = N / 2;
+
+            grid[midRow - 1][midCol] = 1; // Row 1, Middle
+            grid[midRow][midCol - 1] = 1; // Row 2, Left
+            grid[midRow][midCol] = 1; // Row 2, Middle
+            grid[midRow][midCol + 1] = 1; // Row 2, Right
+            grid[midRow + 1][midCol - 1] = 1; // Row 3, Left
+            grid[midRow + 1][midCol + 1] = 1; // Row 3, Right
+            grid[midRow + 2][midCol] = 1; // Row 4, Middle
+        }
+    }
+
 }
