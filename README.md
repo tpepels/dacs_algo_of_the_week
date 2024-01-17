@@ -11,7 +11,7 @@ Each week, we explore a different algorithm or data structure, breaking down its
 ### Week 1: The Spinning Donut
 - **Algorithm**: ASCII Art and 3D Rendering in the Console
 - **Language**: Java
-- [View Code](link-to-week-1-code)
+- [View Code](https://github.com/tpepels/dacs_algo_of_the_week/blob/main/Donut.java)
 
 ### Week 2: TBD
 - **Algorithm**:
