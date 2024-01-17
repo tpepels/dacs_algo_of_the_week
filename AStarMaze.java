@@ -3,7 +3,10 @@ import java.util.*;
 class AStarMaze {
 
     public static void main(String[] args) {
+        // Initialize the maze
         char[][] maze = {
+                // Maze layout where '#' is a wall, '.' is a path, 'S' is the start, and 'E' is
+                // the end
                 { '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
                 { '#', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#' },
                 { 'S', '.', '#', '.', '#', '.', '#', '#', '#', '#', '#', '#', '#', '.', '#' },
@@ -18,7 +21,7 @@ class AStarMaze {
                 { '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' }
         };
 
-        AStarMaze mazeSolver = new AStarMaze(maze); // Start and end coordinates
+        AStarMaze mazeSolver = new AStarMaze(maze);
         boolean solved = mazeSolver.solve();
 
         System.out.println(solved ? "Maze solved!" : "Maze not solved!");
@@ -29,39 +32,45 @@ class AStarMaze {
     private Cell start;
     private Cell end;
 
+    // Constructor to initialize the maze and locate the start and end points
     public AStarMaze(char[][] maze) {
         this.maze = maze;
         locateStartAndEnd();
-        // Print start and end coordinates
         System.out.println("Start: (" + start.row + ", " + start.col + ")");
         System.out.println("End: (" + end.row + ", " + end.col + ")");
-        // Distance between start and end
         System.out.println("Distance: " + heuristic(start, end));
-        System.out.println("Distance: " + heuristic(end, end));
     }
 
+    // Main solve method using the A* algorithm
     public boolean solve() {
+        // Open set priority queue based on the 'f' cost
         PriorityQueue<Cell> openSet = new PriorityQueue<>(Comparator.comparingInt(c -> c.f));
         Map<Cell, Cell> cameFrom = new HashMap<>();
 
+        // Initializing start node values
         start.g = 0;
         start.f = heuristic(start, end);
         openSet.add(start);
 
+        // Main A* algorithm loop
         while (!openSet.isEmpty()) {
             Cell current = openSet.poll();
 
+            // Check if we have reached the end
+            if (current.equals(end)) {
+                reconstructPath(cameFrom);
+                return true;
+            }
+
+            // Explore neighbors
             for (Direction direction : Direction.values()) {
                 Cell neighbor = current.getNeighbor(direction);
                 if (isValidCell(neighbor) && maze[neighbor.row][neighbor.col] != '#') {
                     int tentativeGScore = current.g + 1;
+                    // Update cell info if a better path is found
                     if (tentativeGScore < neighbor.g
                             && (!cameFrom.containsKey(current) || !cameFrom.get(current).equals(neighbor))) {
                         cameFrom.put(neighbor, current);
-                        if (neighbor.equals(end)) {
-                            reconstructPath(cameFrom);
-                            return true;
-                        }
                         neighbor.g = tentativeGScore;
                         neighbor.f = neighbor.g + heuristic(neighbor, end);
                         if (!openSet.contains(neighbor)) {
@@ -70,34 +79,36 @@ class AStarMaze {
                             openSet.remove(neighbor);
                             openSet.add(neighbor);
                         }
-
                     }
                 }
             }
         }
 
-        return false;
+        return false; // Return false if no path is found
     }
 
+    // Method to reconstruct the path from the end to the start
     private void reconstructPath(Map<Cell, Cell> cameFrom) {
         Cell current = end;
         while (cameFrom.containsKey(current)) {
             current = cameFrom.get(current);
             if (!current.equals(start)) {
-                maze[current.row][current.col] = '+';
+                maze[current.row][current.col] = '+'; // Mark the path
             }
         }
     }
 
+    // Heuristic function: Manhattan distance on a square grid
     private int heuristic(Cell a, Cell b) {
-        // Manhattan distance on a square grid
         return Math.abs(a.row - b.row) + Math.abs(a.col - b.col);
     }
 
+    // Check if a cell is valid (within the maze boundaries)
     private boolean isValidCell(Cell cell) {
         return cell.row >= 0 && cell.row < maze.length && cell.col >= 0 && cell.col < maze[0].length;
     }
 
+    // Locate the start (S) and end (E) positions in the maze
     private void locateStartAndEnd() {
         for (int row = 0; row < maze.length; row++) {
             for (int col = 0; col < maze[row].length; col++) {
@@ -114,10 +125,12 @@ class AStarMaze {
         }
     }
 
+    // Enum for possible movement directions
     private enum Direction {
         NORTH, SOUTH, EAST, WEST
     }
 
+    // Inner class representing a cell in the maze
     private class Cell {
         int row, col;
         int g = Integer.MAX_VALUE; // Cost from start to this node
@@ -128,6 +141,7 @@ class AStarMaze {
             this.col = col;
         }
 
+        // Get a neighboring cell based on the direction
         Cell getNeighbor(Direction direction) {
             switch (direction) {
                 case NORTH:
@@ -163,6 +177,7 @@ class AStarMaze {
         }
     }
 
+    // Method to print the current state of the maze
     public void printMaze() {
         for (char[] row : maze) {
             System.out.println(new String(row));

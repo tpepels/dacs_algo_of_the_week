@@ -1,16 +1,47 @@
 import java.util.Stack;
 
-class Maze {
+class DFSMaze {
+    public static void main(String[] args) {
+        char[][] maze = {
+                { '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
+                { '#', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#' },
+                { 'S', '.', '#', '.', '#', '.', '#', '#', '#', '#', '#', '#', '#', '.', '#' },
+                { '#', '#', '#', '.', '#', '.', '.', '.', '.', '.', '.', '.', '#', '.', '#' },
+                { '#', '.', '.', '.', '.', '#', '#', '#', '.', '#', '#', '.', '.', '.', 'E' },
+                { '#', '#', '#', '#', '.', '#', '.', '#', '.', '#', '.', '.', '#', '.', '#' },
+                { '#', '.', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '#', '.', '#' },
+                { '#', '#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '.', '#' },
+                { '#', '.', '.', '.', '.', '.', '.', '.', '.', '#', '.', '.', '#', '.', '#' },
+                { '#', '#', '#', '#', '#', '#', '.', '#', '#', '#', '.', '#', '#', '.', '#' },
+                { '#', '.', '.', '.', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '#' },
+                { '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' }
+        };
+
+        DFSMaze mazeSolver = new DFSMaze(maze); // Create a Maze object with the starting position
+        boolean solved = mazeSolver.solve(); // Solve the maze
+
+        // Print the result
+        if (solved) {
+            System.out.println("Maze solved!");
+        } else {
+            System.out.println("Maze not solved!");
+        }
+
+        // Print the maze after attempting to solve it
+        for (char[] row : maze) {
+            System.out.println(row);
+        }
+    }
+
     // Represent the maze using a 2D character array
     private final char[][] maze;
-    private final int startRow; // Starting row coordinate
-    private final int startCol; // Starting column coordinate
+    private int startRow; // Starting row coordinate
+    private int startCol; // Starting column coordinate
 
     // Constructor to initialize the maze and starting position
-    public Maze(char[][] maze, int startRow, int startCol) {
+    public DFSMaze(char[][] maze) {
         this.maze = maze;
-        this.startRow = startRow;
-        this.startCol = startCol;
+        locateStart();
     }
 
     // Method to solve the maze using Depth-First Search
@@ -86,35 +117,17 @@ class Maze {
         }
     }
 
-    public static void main(String[] args) {
-        char[][] maze = {
-                { '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' },
-                { '#', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '.', '.', '.', '#' },
-                { 'S', '.', '#', '.', '#', '.', '#', '#', '#', '#', '#', '#', '#', '.', '#' },
-                { '#', '#', '#', '.', '#', '.', '.', '.', '.', '.', '.', '.', '#', '.', '#' },
-                { '#', '.', '.', '.', '.', '#', '#', '#', '.', '#', '#', '.', '.', '.', 'E' },
-                { '#', '#', '#', '#', '.', '#', '.', '#', '.', '#', '.', '.', '#', '.', '#' },
-                { '#', '.', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '#', '.', '#' },
-                { '#', '#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '#', '.', '.', '#' },
-                { '#', '.', '.', '.', '.', '.', '.', '.', '.', '#', '.', '.', '#', '.', '#' },
-                { '#', '#', '#', '#', '#', '#', '.', '#', '#', '#', '.', '#', '#', '.', '#' },
-                { '#', '.', '.', '.', '.', '.', '.', '#', '.', '.', '.', '.', '.', '.', '#' },
-                { '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#', '#' }
-        };
-
-        Maze mazeSolver = new Maze(maze, 2, 0); // Create a Maze object with the starting position
-        boolean solved = mazeSolver.solve(); // Solve the maze
-
-        // Print the result
-        if (solved) {
-            System.out.println("Maze solved!");
-        } else {
-            System.out.println("Maze not solved!");
+    // Locate the start (S) position in the maze
+    private void locateStart() {
+        for (int row = 0; row < maze.length; row++) {
+            for (int col = 0; col < maze[row].length; col++) {
+                if (maze[row][col] == 'S') {
+                    this.startCol = col;
+                    this.startRow = row;
+                    return;
+                }
+            }
         }
-
-        // Print the maze after attempting to solve it
-        for (char[] row : maze) {
-            System.out.println(row);
-        }
+        assert false : "Maze must have a starting point marked with 'S'";
     }
 }
