@@ -20,21 +20,44 @@ Each week, we explore a different algorithm or data structure, breaking down its
 - **Language**: Java
 - [View Code](https://github.com/tpepels/dacs_algo_of_the_week/blob/main/GameOfLife.java)
 
-### Week 3: A Simple Decision Tree
+### Week 3: Tic Tac Toe
 
-- **Algorithm**:
-- **Language**:
-- [View Code](link-to-week-3-code)
+- **Algorithm**: Minimax Game Search
+- **Language**: Java
+- [View Code](https://github.com/tpepels/dacs_algo_of_the_week/blob/main/TicTacToe.java)
 
-... (Continue for each week)
+### Week 4: Wait, I'll sort this.
+
+- **Algorithm**: Sleep sort
+- **Language**: Java
+- [View Code](https://github.com/tpepels/dacs_algo_of_the_week/blob/main/SleepSort.java)
+
+### Week 5: Exploring Mazes
+
+- **Algorithm**: Depth-First-Search and A\*
+- **Language**: Java
+- [View DFS Code](https://github.com/tpepels/dacs_algo_of_the_week/blob/main/DFSMaze.java)
+- [View A\* Code](https://github.com/tpepels/dacs_algo_of_the_week/blob/main/AStarMaze.java)
+
+### Week 6: Puzzling Sodukus
+
+- **Algorithm**: Backtracking
+- **Language**: Java
+- [View Code](https://github.com/tpepels/dacs_algo_of_the_week/blob/main/SudokuSolver.java)
+
+### Week 7: Transforming for Compression
+
+- **Algorithm**: Burrows Wheeler Transform
+- **Language**: Java
+- [View Code](https://github.com/tpepels/dacs_algo_of_the_week/blob/main/BurrowsWheelerTransform.java)
 
 ## Contributing
 
-Students are encouraged to contribute to this repository, either by suggesting new topics, improving existing code, or sharing their own implementations of the weekly algorithms.
+Students are encouraged to contribute to this repository, either by suggesting new topics, improving existing code, or sharing their own ideas for the weekly algorithms. Let us know by e-mail if you have any contributions you'd like to share.
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
+This project is licensed under the MIT License.
 
 ## Acknowledgments
 
