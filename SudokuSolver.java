@@ -1,32 +1,29 @@
+public class SudokuSolver {
 
-public class SudokuDynamic {
-
+    /*
+     * Checks if it's safe to place a number in a specific cell.
+     * board: 2D array representing the Sudoku grid
+     * row: Row index
+     * col: Column index
+     * num: Number to be placed
+     * Returns true if it's safe to place the number, false otherwise.
+     */
     public static boolean isSafe(int[][] board, int row, int col, int num) {
-        // Row has the unique (row-clash)
+        // Check row for the same number
         for (int d = 0; d < board.length; d++) {
-
-            // Check if the number we are trying to
-            // place is already present in
-            // that row, return false;
             if (board[row][d] == num) {
                 return false;
             }
         }
 
-        // Column has the unique numbers (column-clash)
+        // Check column for the same number
         for (int r = 0; r < board.length; r++) {
-
-            // Check if the number
-            // we are trying to
-            // place is already present in
-            // that column, return false;
             if (board[r][col] == num) {
                 return false;
             }
         }
 
-        // Corresponding square has
-        // unique number (box-clash)
+        // Check corresponding 3x3 subgrid for the same number
         int sqrt = (int) Math.sqrt(board.length);
         int boxRowStart = row - row % sqrt;
         int boxColStart = col - col % sqrt;
@@ -39,23 +36,28 @@ public class SudokuDynamic {
             }
         }
 
-        // if there is no clash, it's safe
+        // Safe to place the number
         return true;
     }
 
+    /*
+     * Solves the Sudoku puzzle using backtracking.
+     * board: 2D array representing the Sudoku grid
+     * n: Size of the Sudoku grid
+     * Returns true if a solution is found, false otherwise.
+     */
     public static boolean solveSudoku(int[][] board, int n) {
         int row = -1;
         int col = -1;
         boolean isEmpty = true;
+
+        // Find an unassigned cell
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 if (board[i][j] == 0) {
                     row = i;
                     col = j;
-
-                    // We still have some remaining
-                    // missing values in Sudoku
-                    isEmpty = false;
+                    isEmpty = false; // Mark as non-empty
                     break;
                 }
             }
@@ -64,46 +66,45 @@ public class SudokuDynamic {
             }
         }
 
-        // No empty space left
+        // No empty cells left, puzzle solved
         if (isEmpty) {
             return true;
         }
 
-        // Else for each-row backtrack
+        // Try placing numbers 1 to n in the found cell
         for (int num = 1; num <= n; num++) {
             if (isSafe(board, row, col, num)) {
                 board[row][col] = num;
+
+                // Continue with the next cells
                 if (solveSudoku(board, n)) {
                     return true;
-                } else {
-                    // replace it
-                    board[row][col] = 0;
                 }
+
+                // Undo the assignment (backtrack)
+                board[row][col] = 0;
             }
         }
-        return false;
+        return false; // Trigger backtracking
     }
 
+    /*
+     * Prints the solved Sudoku grid.
+     * board: 2D array representing the Sudoku grid
+     * N: Size of the Sudoku grid
+     */
     public static void print(int[][] board, int N) {
-
-        // We got the answer, just print it
         for (int r = 0; r < N; r++) {
             for (int d = 0; d < N; d++) {
-                System.out.print(board[r][d]);
-                System.out.print(" ");
+                System.out.print(board[r][d] + " ");
             }
-            System.out.print("\n");
-
-            if ((r + 1) % (int) Math.sqrt(N) == 0) {
-                System.out.print("");
-            }
+            System.out.println();
         }
     }
 
     // Driver Code
     public static void main(String args[]) {
-
-        int[][] board = new int[][] {
+        int[][] board = {
                 { 3, 0, 6, 5, 0, 8, 4, 0, 0 },
                 { 5, 2, 0, 0, 0, 0, 0, 0, 0 },
                 { 0, 8, 7, 0, 0, 0, 0, 3, 1 },
@@ -117,8 +118,7 @@ public class SudokuDynamic {
         int N = board.length;
 
         if (solveSudoku(board, N)) {
-            // print solution
-            print(board, N);
+            print(board, N); // Print the solved Sudoku grid
         } else {
             System.out.println("No solution");
         }
